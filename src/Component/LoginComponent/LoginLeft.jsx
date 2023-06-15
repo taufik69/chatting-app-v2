@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-import { Signupvalidation } from "../Validation/ValidationSignUpSchma";
+import { signinValidation } from "../Validation/ValidationSignInSchema/Index";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-const Left = () => {
+import { Link } from "react-router-dom";
+
+const LoginLeft = () => {
   const [eye, seteye] = useState(false);
   const initalValue = {
-    full_name: "",
     email: "",
     password: "",
     remember: false,
   };
   const formik = useFormik({
     initialValues: initalValue,
-    validationSchema: Signupvalidation,
+    validationSchema: signinValidation,
     onSubmit: (values) => {
-      console.log("formik valus is : ", values);
+      console.log("formik valus is  from login page: ", values);
     },
   });
 
@@ -26,32 +26,9 @@ const Left = () => {
           Welcome To Chatting Application
         </h1>
         <h5 className="mt-10 font-intel text-[24px] font-bold text-secondary-color">
-          Sign Up
+          Log In
         </h5>
         <form onSubmit={formik.handleSubmit}>
-          <div>
-            <label
-              htmlFor="first_name"
-              className="mb-3 mt-4 block text-[16px] font-semibold text-secondary-color "
-            >
-              First name
-            </label>
-
-            <input
-              type="text"
-              id="full_name"
-              className="mt-3 block w-[90%]  rounded-lg border border-primary-color bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-[#712CF9] focus:ring-[#712CF9]"
-              placeholder="Enter your FullName"
-              onChange={formik.handleChange}
-              value={formik.values.full_name}
-            />
-          </div>
-          {formik.errors.full_name && formik.touched.full_name ? (
-            <p className=" mt-3 text-sm text-red-700">
-              {formik.errors.full_name}
-            </p>
-          ) : null}
-
           <div>
             <label
               htmlFor="email"
@@ -120,30 +97,36 @@ const Left = () => {
             </div>
             <label
               htmlFor="remember"
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="ml-2 text-sm font-medium text-gray-900"
             >
               Remember Me
             </label>
+            <span className="ml-[40%] text-sm font-medium text-gray-900 hover:cursor-pointer hover:underline">
+              Forgot password ?
+            </span>
           </div>
           {formik.errors.remember && formik.touched.remember ? (
             <p className="-mt-2 mb-4  text-sm text-red-700">
               {formik.errors.remember}
             </p>
           ) : null}
+
           <div>
             <button
               type="submit"
               className="mb-2 mr-2 w-[90%] rounded-lg bg-gradient-to-r from-primary-color via-primary-color to-purple-700 px-5 py-2.5 text-center text-sm font-medium text-white shadow-lg shadow-primary-color duration-300 ease-in-out hover:bg-gradient-to-br"
             >
-              Sign Up
+              Sign In
             </button>
           </div>
+
           <div className="mt-6 flex items-center font-intel">
             <p className="font-normal text-[#7A7A7A]">
-              Already Have an accout ?
+              {" "}
+              Don't Have an accout ?
             </p>
-            <h3 className="ml-3 font-semibold text-primary-color hover:underline">
-              <Link to="/login"> Sign in</Link>
+            <h3 className="ml-3 cursor-pointer font-semibold text-primary-color hover:underline">
+              <Link to="/">Sign up</Link>
             </h3>
           </div>
         </form>
@@ -152,4 +135,4 @@ const Left = () => {
   );
 };
 
-export default Left;
+export default LoginLeft;
