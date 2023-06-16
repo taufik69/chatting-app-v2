@@ -3,21 +3,43 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { Signupvalidation } from "../Validation/ValidationSignUpSchma";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
 const Left = () => {
-  const [eye, seteye] = useState(false);
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const [eye, seteye] = useState(true);
+
   const initalValue = {
     full_name: "",
     email: "",
     password: "",
     remember: false,
   };
+
   const formik = useFormik({
     initialValues: initalValue,
     validationSchema: Signupvalidation,
-    onSubmit: (values) => {
-      console.log("formik valus is : ", values);
+
+    onSubmit: async (values, resetForm) => {
+      let { email, password } = values;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((user) => {
+          console.log(user);
+        })
+        .then(() => {
+          navigate("/login");
+          resetForm();
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
     },
   });
+
+  console.log("current  user is :", auth.currentUser);
 
   return (
     <>
@@ -40,6 +62,7 @@ const Left = () => {
             <input
               type="text"
               id="full_name"
+              name="full_name"
               className="mt-3 block w-[90%]  rounded-lg border border-primary-color bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-[#712CF9] focus:ring-[#712CF9]"
               placeholder="Enter your FullName"
               onChange={formik.handleChange}
@@ -63,6 +86,7 @@ const Left = () => {
             <input
               type="email"
               id="email"
+              name="email"
               className="mt-3 block w-[90%]  rounded-lg border border-primary-color bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="Enter your Email"
               onChange={formik.handleChange}
@@ -84,6 +108,7 @@ const Left = () => {
             <input
               type={eye ? "password" : "text"}
               id="password"
+              name="password"
               className=" mt-3 block  w-[90%] rounded-lg border border-primary-color bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-[#712CF9] focus:ring-[#712CF9]"
               placeholder="Enter your Password"
               onChange={formik.handleChange}
