@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { signinValidation } from "../Validation/ValidationSignInSchema/Index";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const LoginLeft = () => {
-  const [eye, seteye] = useState(false);
+  const auth = getAuth();
+
+  const [wrongPassword, setwrongPassword] = useState(false);
+  const [WrongUser, setWrongUser] = useState(false);
+
+  // Getting the user information vai onAuthStateChanged function , this is firebase built in fuction.
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      // console.log("form login page :", user);
+    });
+  }, []);
+
+  const [eye, seteye] = useState(true);
   const initalValue = {
     email: "",
     password: "",
@@ -15,7 +33,32 @@ const LoginLeft = () => {
     initialValues: initalValue,
     validationSchema: signinValidation,
     onSubmit: (values) => {
-      console.log("formik valus is  from login page: ", values);
+      let { email, password } = values;
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("user sucessfullly loged");
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          if (errorCode.includes("password")) {
+            toast.error("🦄 Wow so easy!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            console.log("error from error code password");
+          } else if (errorCode.includes("user")) {
+            setwrongPassword(true);
+          }
+        });
     },
   });
 
@@ -29,6 +72,7 @@ const LoginLeft = () => {
           Log In
         </h5>
         <form onSubmit={formik.handleSubmit}>
+          <ToastContainer />
           <div>
             <label
               htmlFor="email"

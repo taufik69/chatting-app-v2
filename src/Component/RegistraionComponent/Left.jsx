@@ -3,7 +3,12 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { Signupvalidation } from "../Validation/ValidationSignUpSchma";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const Left = () => {
@@ -23,23 +28,28 @@ const Left = () => {
     validationSchema: Signupvalidation,
 
     onSubmit: async (values, resetForm) => {
-      let { email, password } = values;
+      let { full_name, email, password } = values;
+
       createUserWithEmailAndPassword(auth, email, password)
         .then((user) => {
-          console.log(user);
+          sendEmailVerification(auth.currentUser).then(() => {
+            console.log("mail send");
+            updateProfile(auth.currentUser, {
+              displayName: full_name,
+            }).catch((error) => {
+              console.log("error from update profile channel : ", error);
+            });
+          });
         })
-        .then(() => {
-          navigate("/login");
-          resetForm();
-        })
+
         .catch((error) => {
           const errorCode = error.code;
-          const errorMessage = error.message;
         });
+      // this is redirect to registration to login page
+      navigate("/login");
+      resetForm();
     },
   });
-
-  console.log("current  user is :", auth.currentUser);
 
   return (
     <>
