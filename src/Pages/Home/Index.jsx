@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Homeleft from "../../Component/HomeComponent/Homeleft";
 import EmailverifiedPage from "../../Component/HomeComponent/EmailverifiedPage";
+import HomeMiddle from "../../Component/HomeComponent/HomeMiddle";
+import HomeRight from "../../Component/HomeComponent/HomeRight";
 
 const Home = () => {
   const auth = getAuth();
@@ -24,9 +26,11 @@ const Home = () => {
   return (
     <>
       {isEmailVerified ? (
-        <>
+        <div className="flex">
           <Homeleft />
-        </>
+          <HomeMiddle />
+          <HomeRight />
+        </div>
       ) : (
         <>
           <EmailverifiedPage userName={DisplayName} email={email} />
