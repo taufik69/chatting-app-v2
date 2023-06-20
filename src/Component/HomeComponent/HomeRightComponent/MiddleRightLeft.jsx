@@ -5,10 +5,14 @@ import Group from "../Group/Index";
 const MiddleRightLeft = () => {
   return (
     <>
-      <div className=" mt-3 flex w-full gap-x-10 p-6">
-        <Chat />
-        <Group />
-        <Group />
+      <div className="m-7 flex w-full flex-wrap justify-between">
+        {/* <Chat /> */}
+        <Group title="Chat" SearchNeed={true} />
+        <Group title="Group" SearchNeed={true} />
+        <Group title="Friends" SearchNeed={true} />
+        <Group title="People" SearchNeed={true} />
+        <Group title="Friend Request" SearchNeed={true} />
+        <Group title="Block List" />
       </div>
     </>
   );

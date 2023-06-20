@@ -4,9 +4,9 @@ import Search from "../Search/Index";
 const Chat = () => {
   return (
     <>
-      <div className="w-full">
+      <div className="w-[30%]">
         <Search />
-        <div className="mt-6 h-[50%] overflow-x-scroll ">
+        <div className=" mt-6 h-[50%]  overflow-y-scroll ">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
             <li className="py-3 pb-3 sm:pb-5">
               <div className="flex items-center space-x-4">

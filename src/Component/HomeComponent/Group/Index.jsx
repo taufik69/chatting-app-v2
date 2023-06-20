@@ -1,14 +1,15 @@
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Search from "../Search/Index";
-const Group = () => {
+const Group = ({ title, SearchNeed }) => {
   return (
     <>
-      <div className="w-full ">
-        <Search />
-        <div className="mt-6 h-[50%] overflow-y-scroll">
+      <div className="h-[40%] w-[32%] ">
+        <h2 className="mb-3 font-intel text-2xl font-semibold">{title}</h2>
+        {SearchNeed ? <Search /> : null}
+        <div className="mt-6 h-[84%] overflow-y-scroll  ">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
-            <li className="py-3 pb-3 sm:pb-5">
+            <li className="py-3 pb-3">
               <div className="flex items-center space-x-4">
                 <div className="flex-shrink-0 ">
                   <img

@@ -3,7 +3,7 @@ import React from "react";
 const search = () => {
   return (
     <>
-      <form className=" flex w-full items-center">
+      <form className="w-full items-center">
         <div className="relative w-full">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <svg

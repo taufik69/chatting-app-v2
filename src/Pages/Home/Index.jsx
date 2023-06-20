@@ -25,7 +25,7 @@ const Home = () => {
   return (
     <>
       {isEmailVerified ? (
-        <div className="flex">
+        <div className="flex h-screen">
           <Homeleft active="home" />
           <HomeRight />
         </div>
