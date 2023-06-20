@@ -1,7 +1,12 @@
 import React from "react";
+import MiddleRightLeft from "./HomeRightComponent/MiddleRightLeft";
 
 const HomeRight = () => {
-  return <div>HomeRight</div>;
+  return (
+    <>
+      <MiddleRightLeft />
+    </>
+  );
 };
 
 export default HomeRight;
