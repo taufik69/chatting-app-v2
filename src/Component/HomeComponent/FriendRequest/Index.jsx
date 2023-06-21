@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Search from "../Search/Index";
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 const FriendRequest = ({ title, SearchNeed }) => {
   const db = getDatabase();
   const auth = getAuth();
+
   let [friendRequestItem, setfriendRequestItem] = useState([]);
-  // let [reRenderFriendRequest, setreRenderFriendRequest] = useState(false);
+  let [reRenderFriendRequest, setreRenderFriendRequest] = useState(false);
+  let [isActiveFriendRequest, setisActiveFriendRequest] = useState(false);
+  let [cancelFriendRequest, setcancelFriendRequest] = useState(false);
 
   useEffect(() => {
     let friendRequestArray = [];
@@ -26,14 +36,14 @@ const FriendRequest = ({ title, SearchNeed }) => {
       });
       setfriendRequestItem(friendRequestArray);
     });
-  }, []);
+  }, [reRenderFriendRequest]);
 
   // reRenderFriendRequest function machanism start
 
   const HandleAddFriendRequrest = (acceptitem) => {
     set(push(ref(db, "Friends/")), {
-      Friendrequestid: acceptitem.Friendrequestid,
-      senderName: acceptitem.sendername,
+      friendRequestedId: acceptitem.friendRequestedId,
+      senderName: acceptitem.senderName,
       Senderid: acceptitem.Senderid,
       reciverUid: acceptitem.reciverUid,
       reciverName: acceptitem.reciverName,
@@ -41,7 +51,16 @@ const FriendRequest = ({ title, SearchNeed }) => {
         new Date().getMonth() + 1
       } / ${new Date().getFullYear()}`,
     });
+    setisActiveFriendRequest(true);
   };
+
+  // Now Work for HandleCancelRequest button
+  const HandleCancelRequest = (rejectitem) => {
+    remove(ref(db, "Friendrequest/" + rejectitem.friendRequestedId));
+    setcancelFriendRequest(true);
+    setreRenderFriendRequest(!reRenderFriendRequest);
+  };
+
   return (
     <>
       <div className="h-[40%] w-[32%] ">
@@ -65,25 +84,44 @@ const FriendRequest = ({ title, SearchNeed }) => {
                     </p>
                   </div>
                   <div className=" flex items-center justify-around gap-3">
-                    <button
-                      type="button"
-                      onClick={() => HandleAddFriendRequrest(item)}
-                      className=" mt-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
-                    >
-                      Accept
-                    </button>
-
-                    <button
-                      type="button"
-                      className=" mt-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-red-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
-                    >
-                      Cancel
-                    </button>
+                    {isActiveFriendRequest ? (
+                      <button
+                        type="button"
+                        className=" mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
+                      >
+                        Accepted
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => HandleAddFriendRequrest(item)}
+                        className=" mt-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
+                      >
+                        Accept
+                      </button>
+                    )}
+                    {cancelFriendRequest ? (
+                      <button
+                        type="button"
+                        className=" mt-2 w-full rounded-lg bg-gradient-to-br from-purple-500 to-red-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-tl "
+                      >
+                        Canceled
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => HandleCancelRequest(item)}
+                        className=" mt-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-red-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
+                      >
+                        Cancel
+                      </button>
+                    )}
                   </div>
                 </div>
               </li>
             ))}
           </ul>
+
           {friendRequestItem.length == 0 && (
             <div
               class="mb-4 flex rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800

@@ -1,7 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../Search/Index";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
 const Friends = ({ title, SearchNeed }) => {
+  const db = getDatabase();
+  const auth = getAuth();
+
+  let [friendList, setfriendList] = useState([]);
+  useEffect(() => {
+    let friendListArray = [];
+    const userRef = ref(db, "Friends/");
+    onValue(userRef, (snapshot) => {
+      snapshot.forEach((item) => {
+        friendListArray.push({
+          id: item.key,
+          friendRequestedId: item.val().friendRequestedId,
+          reciverName: item.val().reciverName,
+          reciverUid: item.val().reciverUid,
+          senderName: item.val().senderName,
+          Senderid: item.val().Senderid,
+          date: item.val().date,
+        });
+      });
+      setfriendList(friendListArray);
+    });
+  }, []);
+
+  // HandleBlock functionatlity
+  const HandleBlock = (blockitem) => {
+    if (auth.currentUser.uid == blockitem.reciverUid) {
+      set(push(ref(db, "Block/")), {
+        block: item.senderName,
+        blockId: item.Senderid,
+        blockby: item.reciverName,
+        blockbyId: item.reciverUid,
+        blockDate: `${new Date().getFullYear()} - ${
+          new Date().getMonth() + 1
+        } - ${new Date().getDate()}`,
+      });
+    }
+  };
   return (
     <>
       <div className="h-[40%] w-[32%] ">
@@ -9,124 +47,64 @@ const Friends = ({ title, SearchNeed }) => {
         {SearchNeed ? <Search /> : null}
         <div className=" mt-6 h-[84%] overflow-y-scroll">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
-            <li className="py-3 pb-3 sm:pb-5">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 ">
-                  <img
-                    className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                    src="../../../../public/images/Home/oggy.gif"
-                    alt="public/images/Home/oggy.gif"
-                  />
+            {friendList.map((item) => (
+              <li className="py-3 pb-3 sm:pb-5">
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 ">
+                    <img
+                      className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
+                      src="../../../../public/images/Home/6.gif"
+                      alt="public/images/Home/oggy.gif"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-intel text-sm font-medium text-primary-color">
+                      {auth.currentUser.uid == item.reciverUid ? (
+                        <h2>{item.senderName} </h2>
+                      ) : (
+                        <h2>{item.reciverName} </h2>
+                      )}
+                    </p>
+                  </div>
+                  <div className="inline-flex items-center text-xl font-semibold text-primary-color">
+                    <button
+                      type="button"
+                      onClick={() => HandleBlock(item)}
+                      className=" mt-2 w-full rounded-lg bg-gradient-to-br from-purple-500 to-red-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-tl "
+                    >
+                      Block
+                    </button>
+                  </div>
                 </div>
-                <div className="relative min-w-0 flex-1">
-                  <p className="font-intel text-sm font-medium text-primary-color">
-                    Neil Sims
-                  </p>
-                  <p className="truncate text-sm text-gray-500 ">
-                    email@flowbite.com
-                  </p>
-                  <p className="absolute right-5 top-5 text-xs text-gray-500">
-                    5.55 pm
-                  </p>
-                </div>
-                <div className="inline-flex items-center text-xl font-semibold text-primary-color">
-                  <BsThreeDotsVertical className="mr-4" />
-                </div>
-              </div>
-            </li>
-
-            <li className="py-3 pb-3 sm:pb-5">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 ">
-                  <img
-                    className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                    src="../../../../public/images/Home/4.gif"
-                    alt="public/images/Home/oggy.gif"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="font-intel text-sm font-medium text-primary-color">
-                    Neil Sims
-                  </p>
-                  <p className="truncate text-sm text-gray-500 ">
-                    email@flowbite.com
-                  </p>
-                </div>
-                <div className="inline-flex items-center text-xl font-semibold text-primary-color">
-                  <BsThreeDotsVertical className="mr-4" />
-                </div>
-              </div>
-            </li>
-
-            <li className="py-3 pb-3 sm:pb-5">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 ">
-                  <img
-                    className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                    src="../../../../public/images/Home/3.gif"
-                    alt="public/images/Home/oggy.gif"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="font-intel text-sm font-medium text-primary-color">
-                    Neil Sims
-                  </p>
-                  <p className="truncate text-sm text-gray-500 ">
-                    email@flowbite.com
-                  </p>
-                </div>
-                <div className="inline-flex items-center text-xl font-semibold text-primary-color">
-                  <BsThreeDotsVertical className="mr-4" />
-                </div>
-              </div>
-            </li>
-
-            <li className="py-3 pb-3 sm:pb-5">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 ">
-                  <img
-                    className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                    src="../../../../public/images/Home/2.gif"
-                    alt="public/images/Home/oggy.gif"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="font-intel text-sm font-medium text-primary-color">
-                    Neil Sims
-                  </p>
-                  <p className="truncate text-sm text-gray-500 ">
-                    email@flowbite.com
-                  </p>
-                </div>
-                <div className="inline-flex items-center text-xl font-semibold text-primary-color">
-                  <BsThreeDotsVertical className="mr-4" />
-                </div>
-              </div>
-            </li>
-
-            <li className="py-3 pb-3 sm:pb-5">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 ">
-                  <img
-                    className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                    src="../../../../public/images/Home/1.gif"
-                    alt="public/images/Home/oggy.gif"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="font-intel text-sm font-medium text-primary-color">
-                    Neil Sims
-                  </p>
-                  <p className="truncate text-sm text-gray-500 ">
-                    email@flowbite.com
-                  </p>
-                </div>
-                <div className="inline-flex items-center text-xl font-semibold text-primary-color">
-                  <BsThreeDotsVertical className="mr-4 cursor-pointer" />
-                </div>
-              </div>
-            </li>
+              </li>
+            ))}
           </ul>
+
+          {friendList.length == 0 && (
+            <div
+              class="mb-4 flex rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800
+              "
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="mr-3 inline h-5 w-5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+
+              <div>
+                <span class="font-medium">No Friend Here!</span> Wait for freind
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

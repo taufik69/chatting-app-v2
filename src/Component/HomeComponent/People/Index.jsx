@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Search from "../Search/Index";
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 
 const People = ({ title, SearchNeed }) => {
   const db = getDatabase();
