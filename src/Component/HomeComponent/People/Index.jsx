@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import Search from "../Search/Index";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
+
 const People = ({ title, SearchNeed }) => {
   const db = getDatabase();
   const auth = getAuth();
   let [userlistitem, setuserlistitem] = useState([]);
+  let [frdrequestlist, setfrdrequestlist] = useState([]);
+  let [reRenderFriendRequest, setreRenderFriendRequest] = useState(false);
 
   useEffect(() => {
     let userArray = [];
@@ -22,7 +24,30 @@ const People = ({ title, SearchNeed }) => {
       setuserlistitem(userArray);
     });
   }, []);
-  console.log("userlist is : ", userlistitem);
+
+  // HandleAddFriendRequrest functionality in below this fuction
+  const HandleAddFriendRequrest = (userItem) => {
+    set(push(ref(db, "Friendrequest/")), {
+      reciverName: userItem.username,
+      reciverUid: userItem.uid,
+      reciverEmail: userItem.email,
+      senderName: auth.currentUser.displayName,
+      Senderid: auth.currentUser.uid,
+    });
+
+    setreRenderFriendRequest(!reRenderFriendRequest);
+  };
+  useEffect(() => {
+    let FriendrequestArray = [];
+    const FriendrequestRef = ref(db, "Friendrequest/");
+    onValue(FriendrequestRef, (snapshot) => {
+      snapshot.forEach((item) => {
+        FriendrequestArray.push(item.val().reciverUid + item.val().Senderid);
+      });
+      setfrdrequestlist(FriendrequestArray);
+    });
+  }, [reRenderFriendRequest]);
+
   return (
     <>
       <div className="h-[40%] w-[32%] ">
@@ -52,12 +77,25 @@ const People = ({ title, SearchNeed }) => {
                         </p>
                       </div>
                       <div className=" flex items-center justify-around ">
-                        <button
-                          type="button"
-                          className=" mt-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300"
-                        >
-                          Add
-                        </button>
+                        {frdrequestlist.includes(
+                          item.uid + auth.currentUser.uid ||
+                            auth.currentUser.uid + item.uid
+                        ) ? (
+                          <button
+                            type="button"
+                            className="mr-4 mt-2 w-full rounded-lg bg-gradient-to-br from-purple-500 to-green-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl  "
+                          >
+                            Added
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => HandleAddFriendRequrest(item)}
+                            className="mr-4 mt-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl"
+                          >
+                            Add
+                          </button>
+                        )}
                       </div>
                     </div>
                   </li>
