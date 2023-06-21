@@ -51,7 +51,7 @@ const Homeleft = ({ active }) => {
   return (
     <>
       <ToastContainer />
-      <div className="w[35%] p-5 px-7 shadow-lg shadow-indigo-500/40">
+      <div className="max-w[35%] p-5 px-7 shadow-lg shadow-indigo-500/40">
         <div>
           <h1 className="mb-10 font-intel text-4xl font-bold text-primary-color">
             Chatting.
@@ -65,7 +65,7 @@ const Homeleft = ({ active }) => {
                 src={photurl}
                 alt="Home page avatar"
               />
-              <span className="absolute bottom-0 left-7  h-3.5 w-3.5 rounded-full border-2 border-white bg-green-400 dark:border-gray-800"></span>
+              <span className="absolute bottom-0 left-7  h-3.5 w-3.5 rounded-full border-2 border-white bg-green-400"></span>
             </div>
           ) : (
             <div className="relative">
@@ -74,15 +74,17 @@ const Homeleft = ({ active }) => {
                 src="../../../public/images/Emailpage/avatar.gif"
                 alt="Home page avatar"
               />
-              <span className="absolute bottom-0 left-7  h-3.5 w-3.5 rounded-full border-2 border-white bg-green-400 dark:border-gray-800"></span>
+              <span className="absolute bottom-0 left-7  h-3.5 w-3.5 rounded-full border-2 border-white bg-green-400 "></span>
             </div>
           )}
 
-          <div className="px-7 font-intel">
-            <p className=" text-xl font-semibold  text-primary-color">
+          <div className="mt-2 px-3 font-intel">
+            <p className=" fixed text-xl font-semibold  text-primary-color">
               {DisplayName}
             </p>
-            <p className="text-md  font-normal text-[#7A7A7A]">Active</p>
+            <p className="text-md fixed ml-1 mt-6 font-normal text-[#7A7A7A]">
+              Active
+            </p>
           </div>
         </div>
 

@@ -10,6 +10,7 @@ const Home = () => {
   const [isEmailVerified, setisEmailVerified] = useState(null);
   const [DisplayName, setDisplayName] = useState(null);
   const [email, setemail] = useState(null);
+
   // Now track the recently sign in user on useEffect
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -18,10 +19,10 @@ const Home = () => {
         setisEmailVerified(emailVerified);
         setDisplayName(displayName);
         setemail(email);
-        // console.log("current user is emailverified , ", email);
       }
     });
   }, []);
+
   return (
     <>
       {isEmailVerified ? (

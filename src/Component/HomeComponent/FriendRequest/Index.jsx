@@ -1,7 +1,7 @@
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Search from "../Search/Index";
-const Chat = ({ title, SearchNeed }) => {
+const FriendRequest = ({ title, SearchNeed }) => {
   return (
     <>
       <div className="h-[40%] w-[32%] ">
@@ -133,4 +133,4 @@ const Chat = ({ title, SearchNeed }) => {
   );
 };
 
-export default Chat;
+export default FriendRequest;

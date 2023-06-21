@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { Signupvalidation } from "../Validation/ValidationSignUpSchma";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
-
+import { getDatabase, push, ref, set } from "firebase/database";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 const Left = () => {
   const auth = getAuth();
+  const db = getDatabase();
   const navigate = useNavigate();
   const [eye, seteye] = useState(true);
   const [isLoading, setisLoading] = useState(false);
@@ -26,16 +27,17 @@ const Left = () => {
     remember: false,
   };
 
+  // Authentication method using formik and
   const formik = useFormik({
     initialValues: initalValue,
     validationSchema: Signupvalidation,
 
     onSubmit: async (values, actions) => {
       let { full_name, email, password } = values;
-
       setisLoading(true);
       createUserWithEmailAndPassword(auth, email, password)
         .then((user) => {
+          // console.log("uid ", user.uid);
           toast.success("🦄 sign up sucessfull !", {
             position: "top-center",
             autoClose: 5000,
@@ -50,9 +52,17 @@ const Left = () => {
             console.log("mail send");
             updateProfile(auth.currentUser, {
               displayName: full_name,
-            }).catch((error) => {
-              console.log("error from update profile channel : ", error);
-            });
+            })
+              .then(() => {
+                set(push(ref(db, "users/")), {
+                  username: full_name,
+                  email: email,
+                  uid: auth.currentUser.uid,
+                });
+              })
+              .catch((error) => {
+                console.log("error from update profile channel : ", error);
+              });
           });
         })
 
@@ -64,9 +74,9 @@ const Left = () => {
       // this is redirect to registration to login page
       setTimeout(() => {
         setisLoading(false);
+        actions.resetForm();
         navigate("/login");
       }, 2200);
-      actions.resetForm();
     },
   });
 
