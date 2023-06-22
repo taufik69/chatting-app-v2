@@ -85,7 +85,7 @@ const Friends = ({ title, SearchNeed }) => {
                   className="flex cursor-pointer items-center space-x-4"
                   onClick={() => HandleActiveChatReducer(item)}
                 >
-                  <div className="flex-shrink-0 ">
+                  <div className="flex-shrink-0">
                     <img
                       className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
                       src="../../../../public/images/Home/6.gif"

@@ -9,11 +9,11 @@ const Message = () => {
         <div>
           <Homeleft active="message" />
         </div>
-        <div className="border-2 border-red-600 p-7">
+        <div className="w-1/3  px-10 py-6">
           <Friends title={"Friends"} SearchNeed={true} />
         </div>
-        <div>
-          <MessageRight />
+        <div className="min-h-screen w-1/2 border-2">
+          <MessageRight overflow={false} />
         </div>
       </div>
     </>
