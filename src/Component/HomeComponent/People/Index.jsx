@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Search from "../Search/Index";
+import { FaUserFriends } from "react-icons/fa";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 
@@ -8,12 +9,13 @@ const People = ({ title, SearchNeed }) => {
   const auth = getAuth();
   let [userlistitem, setuserlistitem] = useState([]);
   let [frdrequestlist, setfrdrequestlist] = useState([]);
+  let [friend, setfriend] = useState([]);
   let [reRenderFriendRequest, setreRenderFriendRequest] = useState(false);
 
   useEffect(() => {
-    let userArray = [];
     const userRef = ref(db, "users/");
     onValue(userRef, (snapshot) => {
+      let userArray = [];
       snapshot.forEach((item) => {
         userArray.push({
           username: item.val().username,
@@ -37,10 +39,11 @@ const People = ({ title, SearchNeed }) => {
 
     setreRenderFriendRequest(!reRenderFriendRequest);
   };
+  // fetching data from friend requrest
   useEffect(() => {
-    let FriendrequestArray = [];
     const FriendrequestRef = ref(db, "Friendrequest/");
     onValue(FriendrequestRef, (snapshot) => {
+      let FriendrequestArray = [];
       snapshot.forEach((item) => {
         FriendrequestArray.push(item.val().reciverUid + item.val().Senderid);
       });
@@ -48,13 +51,25 @@ const People = ({ title, SearchNeed }) => {
     });
   }, [reRenderFriendRequest]);
 
+  // Fethcing data from friend request and check is this person is freind with auth.currentuser.uid
+  useEffect(() => {
+    const FriendstRef = ref(db, "Friends/");
+    onValue(FriendstRef, (snapshot) => {
+      let FriendArray = [];
+      snapshot.forEach((item) => {
+        FriendArray.push(item.val().reciverUid + item.val().Senderid);
+      });
+      setfriend(FriendArray);
+    });
+  }, []);
+
   return (
     <>
-      <div className="h-[40%] w-[32%] ">
+      <div className=" ">
         <h2 className="mb-3 font-intel text-2xl font-semibold">{title}</h2>
         {SearchNeed ? <Search /> : null}
 
-        <div className=" mt-6 h-[84%] overflow-y-scroll">
+        <div className=" mt-6 h-[225px] overflow-y-scroll">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
             {userlistitem.map(
               (item) =>
@@ -77,10 +92,18 @@ const People = ({ title, SearchNeed }) => {
                         </p>
                       </div>
                       <div className=" flex items-center justify-around ">
-                        {frdrequestlist.includes(
-                          item.uid + auth.currentUser.uid ||
-                            auth.currentUser.uid + item.uid
-                        ) ? (
+                        {friend.includes(item.uid + auth.currentUser.uid) ||
+                        friend.includes(auth.currentUser.uid + item.uid) ? (
+                          <button
+                            type="button"
+                            className="mr-4 mt-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl"
+                          >
+                            <FaUserFriends />
+                          </button>
+                        ) : frdrequestlist.includes(
+                            item.uid + auth.currentUser.uid ||
+                              auth.currentUser.uid + item.uid
+                          ) ? (
                           <button
                             type="button"
                             className="mr-4 mt-2 w-full rounded-lg bg-gradient-to-br from-purple-500 to-green-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl  "

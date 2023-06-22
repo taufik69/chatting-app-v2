@@ -4,7 +4,9 @@ import MiddleRightLeft from "./HomeRightComponent/MiddleRightLeft";
 const HomeRight = () => {
   return (
     <>
-      <MiddleRightLeft />
+      <div className="">
+        <MiddleRightLeft />
+      </div>
     </>
   );
 };

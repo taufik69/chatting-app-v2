@@ -26,9 +26,13 @@ const Home = () => {
   return (
     <>
       {isEmailVerified ? (
-        <div className="flex h-screen">
-          <Homeleft active="home" />
-          <HomeRight />
+        <div className="flex">
+          <div className="h-screen">
+            <Homeleft active="home" />
+          </div>
+          <div className="">
+            <HomeRight />
+          </div>
         </div>
       ) : (
         <>
@@ -38,5 +42,7 @@ const Home = () => {
     </>
   );
 };
-
+{
+  /* h-[40%] w-[32%] */
+}
 export default Home;

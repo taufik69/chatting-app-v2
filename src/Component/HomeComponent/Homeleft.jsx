@@ -51,7 +51,7 @@ const Homeleft = ({ active }) => {
   return (
     <>
       <ToastContainer />
-      <div className="max-w[35%] p-5 px-7 shadow-lg shadow-indigo-500/40">
+      <div className="p-5 px-7 shadow-lg shadow-indigo-500/40">
         <div>
           <h1 className="mb-10 font-intel text-4xl font-bold text-primary-color">
             Chatting.
@@ -74,17 +74,15 @@ const Homeleft = ({ active }) => {
                 src="../../../public/images/Emailpage/avatar.gif"
                 alt="Home page avatar"
               />
-              <span className="absolute bottom-0 left-7  h-3.5 w-3.5 rounded-full border-2 border-white bg-green-400 "></span>
+              <span className="absolute bottom-3 left-6  h-3.5 w-3.5 rounded-full border-2 border-white bg-green-400 "></span>
             </div>
           )}
 
-          <div className="mt-2 px-3 font-intel">
-            <p className=" fixed text-xl font-semibold  text-primary-color">
+          <div className=" px-3 font-intel">
+            <p className=" ml-2 text-xl font-semibold  text-primary-color">
               {DisplayName}
             </p>
-            <p className="text-md fixed ml-1 mt-6 font-normal text-[#7A7A7A]">
-              Active
-            </p>
+            <p className="text-md  ml-2 font-normal text-[#7A7A7A]">Active</p>
           </div>
         </div>
 
@@ -99,7 +97,7 @@ const Homeleft = ({ active }) => {
                   : ""
               }
             >
-              <Link to="#" className="flex items-center gap-x-2">
+              <Link to="/home" className="flex items-center gap-x-2">
                 <AiOutlineHome className="text-xl" />
                 <span className="text-md font-intel font-normal">Home</span>
               </Link>
@@ -111,7 +109,7 @@ const Homeleft = ({ active }) => {
                   : ""
               }
             >
-              <Link to="#" className="flex items-center gap-x-2">
+              <Link to="/message" className="flex items-center gap-x-2">
                 <BiMessageRounded className="text-xl" />
                 <span className="text-md font-intel font-normal">Message</span>
               </Link>
@@ -173,7 +171,7 @@ const Homeleft = ({ active }) => {
         {/* button part jsx */}
         <button
           type="button"
-          className=" mr-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300"
+          className="mb-3 mr-2 w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300"
           onClick={handleSignOut}
         >
           Log Out

@@ -19,9 +19,9 @@ const FriendRequest = ({ title, SearchNeed }) => {
   let [cancelFriendRequest, setcancelFriendRequest] = useState(false);
 
   useEffect(() => {
-    let friendRequestArray = [];
     const userRef = ref(db, "Friendrequest/");
     onValue(userRef, (snapshot) => {
+      let friendRequestArray = [];
       snapshot.forEach((item) => {
         if (item.val().reciverUid == auth.currentUser.uid) {
           friendRequestArray.push({
@@ -50,6 +50,8 @@ const FriendRequest = ({ title, SearchNeed }) => {
       date: `${new Date().getDate()} / ${
         new Date().getMonth() + 1
       } / ${new Date().getFullYear()}`,
+    }).then(() => {
+      remove(ref(db, "Friendrequest/" + acceptitem.friendRequestedId));
     });
     setisActiveFriendRequest(true);
   };
@@ -63,10 +65,10 @@ const FriendRequest = ({ title, SearchNeed }) => {
 
   return (
     <>
-      <div className="h-[40%] w-[32%] ">
+      <div className=" ">
         <h2 className="mb-3 font-intel text-2xl font-semibold">{title}</h2>
         {SearchNeed ? <Search /> : null}
-        <div className=" mt-6 h-[84%] overflow-y-scroll">
+        <div className=" mt-6 h-[225px] overflow-y-scroll">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
             {friendRequestItem.map((item) => (
               <li className="py-3 pb-3 sm:pb-5">
@@ -100,6 +102,7 @@ const FriendRequest = ({ title, SearchNeed }) => {
                         Accept
                       </button>
                     )}
+
                     {cancelFriendRequest ? (
                       <button
                         type="button"

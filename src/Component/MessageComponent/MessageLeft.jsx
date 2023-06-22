@@ -1,83 +1,12 @@
-import React, { useState, useEffect } from "react";
-import Search from "../Search/Index";
-import { getAuth } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { ActiveChatReducer } from "../../../Slices/ChatSlice";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  set,
-  push,
-  remove,
-} from "firebase/database";
-const Friends = ({ title, SearchNeed }) => {
-  const db = getDatabase();
-  const auth = getAuth();
-  const dispatch = useDispatch();
+import React from "react";
 
-  let [friendList, setfriendList] = useState([]);
-  const [blockState, setblockState] = useState(false);
-
-  useEffect(() => {
-    const userRef = ref(db, "Friends/");
-    onValue(userRef, (snapshot) => {
-      let friendListArray = [];
-      snapshot.forEach((item) => {
-        friendListArray.push({
-          id: item.key,
-          friendRequestedId: item.val().friendRequestedId,
-          reciverName: item.val().reciverName,
-          reciverUid: item.val().reciverUid,
-          senderName: item.val().senderName,
-          Senderid: item.val().Senderid,
-          date: item.val().date,
-        });
-      });
-      setfriendList(friendListArray);
-    });
-  }, [blockState]);
-  // console.log("friendList", friendList);
-
-  // HandleBlock functionatlity
-  const HandleBlock = (blockitem) => {
-    if (auth.currentUser.uid == blockitem.reciverUid) {
-      set(push(ref(db, "Block/")), {
-        block: blockitem.senderName,
-        blockId: blockitem.Senderid,
-        blockby: blockitem.reciverName,
-        blockbyId: blockitem.reciverUid,
-        blockDate: `${new Date().getFullYear()} - ${
-          new Date().getMonth() + 1
-        } - ${new Date().getDate()}`,
-      }).then(() => {
-        remove(ref(db, "Friends/" + blockitem.id));
-      });
-      setblockState(!blockState);
-    }
-  };
-  // reduer HandleActiveChatReducer function machanism
-  const HandleActiveChatReducer = (item) => {
-    let userinfo = {};
-    if (auth.currentUser.uid == item.reciverUid) {
-      // console.log('reciver don\'t need');
-      userinfo.status = "singlemsg";
-      userinfo.id = item.Senderid;
-      userinfo.name = item.senderName;
-    } else {
-      // console.log("reciver need");
-      userinfo.status = "singlemsg";
-      userinfo.id = item.reciverUid;
-      userinfo.name = item.reciverName;
-    }
-    dispatch(ActiveChatReducer(userinfo));
-  };
+const MessageLeft = ({ title, SearchNeed }) => {
   return (
     <>
-      <div className="">
+      <div className="h-[100%] w-[32%] ">
         <h2 className="mb-3 font-intel text-2xl font-semibold">{title}</h2>
         {SearchNeed ? <Search /> : null}
-        <div className=" mt-6 h-[225px] overflow-y-scroll">
+        <div className=" mt-6 h-[84%] overflow-y-scroll">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
             {friendList.map((item) => (
               <li className="py-3 pb-3 sm:pb-5">
@@ -128,7 +57,7 @@ const Friends = ({ title, SearchNeed }) => {
           {friendList.length == 0 && (
             <div
               class="mb-4 flex rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800
-              "
+        "
               role="alert"
             >
               <svg
@@ -156,4 +85,4 @@ const Friends = ({ title, SearchNeed }) => {
   );
 };
 
-export default Friends;
+export default MessageLeft;
