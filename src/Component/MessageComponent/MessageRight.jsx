@@ -53,6 +53,13 @@ const MessageRight = ({ overflow }) => {
         qui esse, quae iusto culpa ad eum repellat sequi illo consectetur
         aspernatur aliquam perferendis odit? Fugiat voluptatem accusantium quas
         omnis. Dicta est in aliquam nesciunt reprehenderit minus iste ratione
+        exercitsdam minima facilis? Ad ipsum sunt a reiciendis eos, nobis
+        nesciunt, unde dolorem, eaque consequuntur nisi eius. Veniam aut nobis
+        beatae est cum molestias, fugiat nesciunt quasi fugit ad? Saepe, culpa
+        officiis! Modi, omnis atque. Maxime, fugit officia magnam ducimus magnam
+        qui esse, quae iusto culpa ad eum repellat sequi illo consectetur
+        aspernatur aliquam perferendis odit? Fugiat voluptatem accusantium quas
+        omnis. Dicta est in aliquam nesciunt reprehenderit minus iste ratione
         exercitationem blanditiis consequuntur laudantium repellat eos nobis
         quae illum porro optio, officia ex quas mollitia quaerat voluptatibus?
         Repudiandae impedit, doloribus vero doloremque aut porro quaerat dolor
@@ -68,8 +75,90 @@ const MessageRight = ({ overflow }) => {
         minima facilis ut odit ullam quibusdam voluptas repellat eveniet dicta?
         Amet ipsum officia voluptatum? Vero in earum optio inventore corrupti
         sit nesciunt eos expedita voluptas at impedit distinctio sequi deserunt
-        incidunt ut veritatis quaerat suscipit, quia facere nihil laudantium.
-        Est, nostrum fuga?
+        incidunt ut veritatis quaerat sdam minima facilis? Ad ipsum sunt a
+        reiciendis eos, nobis nesciunt, unde dolorem, eaque consequuntur nisi
+        eius. Veniam aut nobis beatae est cum molestias, fugiat nesciunt quasi
+        fugit ad? Saepe, culpa officiis! Modi, omnis atque. Maxime, fugit
+        officia magnam ducimus magnam qui esse, quae iusto culpa ad eum repellat
+        sequi illo consectetur aspernatur aliquam perferendis odit? Fugiat
+        voluptatem accusantium quas omnis. Dicta est in aliquam nesciunt
+        reprehenderit minus iste ratione exercitationem blanditiis consequuntur
+        laudantium repellat eos nobis quae illum porro optio, officia ex quas
+        mollitia quaerat voluptatibus? Repudiandae impedit, doloribus vero
+        doloremque aut porro quaerat dolor et repellendus neque voluptates
+        magnam a, esse nihil. Odit iste repellendus omnis optio eaque
+        dignissimos consectetur. Aliquam doloremque, error quidem officiis eum
+        impedit nemo repellat officia rerum ea qui ipsum quod perspiciatis
+        voluptatum quos quas libero, repellendus eius mollitia autem magni culpa
+        vero ipsa? Laudantium illo neque enim adipisci assumenda minima nulla
+        veniam accusantium dolores doloremque voluptas aliquid, iste tenetur
+        vitae. Iusto perferendis maiores dolore, totam quae officia voluptatem
+        ipsam placeat consequuntur. Earum ex minus magnam, similique asperiores
+        reiciendis sed minima facilis ut odit ullam quibusdam voluptas repellat
+        eveniet dicta? Amet ipsum officia voluptatum? Vero in earum optio
+        inventore corrupti sit nesciunt eos expedita voluptas at impedit
+        distinctio sequi deserunt incidunt ut veritatis quaerat sdam minima
+        facilis? Ad ipsum sunt a reiciendis eos, nobis nesciunt, unde dolorem,
+        eaque consequuntur nisi eius. Veniam aut nobis beatae est cum molestias,
+        fugiat nesciunt quasi fugit ad? Saepe, culpa officiis! Modi, omnis
+        atque. Maxime, fugit officia magnam ducimus magnam qui esse, quae iusto
+        culpa ad eum repellat sequi illo consectetur aspernatur aliquam
+        perferendis odit? Fugiat voluptatem accusantium quas omnis. Dicta est in
+        aliquam nesciunt reprehenderit minus iste ratione exercitationem
+        blanditiis consequuntur laudantium repellat eos nobis quae illum porro
+        optio, officia ex quas mollitia quaerat voluptatibus? Repudiandae
+        impedit, doloribus vero doloremque aut porro quaerat dolor et
+        repellendus neque voluptates magnam a, esse nihil. Odit iste repellendus
+        omnis optio eaque dignissimos consectetur. Aliquam doloremque, error
+        quidem officiis eum impedit nemo repellat officia rerum ea qui ipsum
+        quod perspiciatis voluptatum quos quas libero, repellendus eius mollitia
+        autem magni culpa vero ipsa? Laudantium illo neque enim adipisci
+        assumenda minima nulla veniam accusantium dolores doloremque voluptas
+        aliquid, iste tenetur vitae. Iusto perferendis maiores dolore, totam
+        quae officia voluptatem ipsam placeat consequuntur. Earum ex minus
+        magnam, similique asperiores reiciendis sed minima facilis ut odit ullam
+        quibusdam voluptas repellat eveniet dicta? Amet ipsum officia
+        voluptatum? Vero in earum optio inventore corrupti sit nesciunt eos
+        expedita voluptas at impedit distinctio sequi deserunt incidunt ut
+        veritatis quaerat sdam minima facilis? Ad ipsum sunt a reiciendis eos,
+        nobis nesciunt, unde dolorem, eaque consequuntur nisi eius. Veniam aut
+        nobis beatae est cum molestias, fugiat nesciunt quasi fugit ad? Saepe,
+        culpa officiis! Modi, omnis atque. Maxime, fugit officia magnam ducimus
+        magnam qui esse, quae iusto culpa ad eum repellat sequi illo consectetur
+        aspernatur aliquam perferendis odit? Fugiat voluptatem accusantium quas
+        omnis. Dicta est in aliquam nesciunt reprehenderit minus iste ratione
+        exercitationem blanditiis consequuntur laudantium repellat eos nobis
+        quae illum porro optio, officia ex quas mollitia quaerat voluptatibus?
+        Repudiandae impedit, doloribus vero doloremque aut porro quaerat dolor
+        et repellendus neque voluptates magnam a, esse nihil. Odit iste
+        repellendus omnis optio eaque dignissimos consectetur. Aliquam
+        doloremque, error quidem officiis eum impedit nemo repellat officia
+        rerum ea qui ipsum quod perspiciatis voluptatum quos quas libero,
+        repellendus eius mollitia autem magni culpa vero ipsa? Laudantium illo
+        neque enim adipisci assumenda minima nulla veniam accusantium dolores
+        doloremque voluptas aliquid, iste tenetur vitae. Iusto perferendis
+        maiores dolore, totam quae officia voluptatem ipsam placeat
+        consequuntur. Earum ex minus magnam, similique asperiores reiciendis sed
+        minima facilis ut odit ullam quibusdam voluptas repellat eveniet dicta?
+        Amet ipsum officia voluptatum? Vero in earum optio inventore corrupti
+        sit nesciunt eos expedita voluptas at impedit distinctio sequi deserunt
+        incidunt ut veritatis quaerat ationem blanditiis consequuntur laudantium
+        repellat eos nobis quae illum porro optio, officia ex quas mollitia
+        quaerat voluptatibus? Repudiandae impedit, doloribus vero doloremque aut
+        porro quaerat dolor et repellendus neque voluptates magnam a, esse
+        nihil. Odit iste repellendus omnis optio eaque dignissimos consectetur.
+        Aliquam doloremque, error quidem officiis eum impedit nemo repellat
+        officia rerum ea qui ipsum quod perspiciatis voluptatum quos quas
+        libero, repellendus eius mollitia autem magni culpa vero ipsa?
+        Laudantium illo neque enim adipisci assumenda minima nulla veniam
+        accusantium dolores doloremque voluptas aliquid, iste tenetur vitae.
+        Iusto perferendis maiores dolore, totam quae officia voluptatem ipsam
+        placeat consequuntur. Earum ex minus magnam, similique asperiores
+        reiciendis sed minima facilis ut odit ullam quibusdam voluptas repellat
+        eveniet dicta? Amet ipsum officia voluptatum? Vero in earum optio
+        inventore corrupti sit nesciunt eos expedita voluptas at impedit
+        distinctio sequi deserunt incidunt ut veritatis quaerat suscipit, quia
+        facere nihil laudantium. Est, nostrum fuga?
       </div>
 
       <div className="p-3">
