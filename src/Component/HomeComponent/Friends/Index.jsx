@@ -71,6 +71,7 @@ const Friends = ({ title, SearchNeed, overflow }) => {
       userinfo.name = item.reciverName;
     }
     dispatch(ActiveChatReducer(userinfo));
+    localStorage.setItem("userinfo", JSON.stringify(userinfo));
   };
   return (
     <>
