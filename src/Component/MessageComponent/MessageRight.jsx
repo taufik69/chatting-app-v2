@@ -2,21 +2,28 @@ import React, { useState, useEffect } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineSend } from "react-icons/ai";
 import { HiOutlineCamera } from "react-icons/hi";
+import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  set,
-  push,
-  remove,
-} from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import Modal from "react-modal";
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    width: "700px",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 const MessageRight = ({ overflow }) => {
   const db = getDatabase();
   const auth = getAuth();
 
   const [msg, setmsg] = useState("");
+  const [image, setimage] = useState(null);
   const [msgStrogestate, setmsgStrogestate] = useState([]);
 
   let userInfo = useSelector((state) => state.chat);
@@ -76,6 +83,23 @@ const MessageRight = ({ overflow }) => {
       setmsgStrogestate(msgStroge);
     });
   }, [id]);
+
+  // modal add and HandleUploadImage functionality
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  // get a img on this fucntion
+  const HandleUploadImage = (event) => {
+    setimage(event.target.files[0]);
+  };
+  console.log("image", image.name);
 
   return (
     <div>
@@ -149,6 +173,7 @@ const MessageRight = ({ overflow }) => {
             />
             <button
               type="submit"
+              onClick={openModal}
               className="absolute right-20 top-0 rounded border border-green-700 bg-green-700 p-2.5 text-xl font-medium text-white hover:bg-blue-800  "
             >
               <HiOutlineCamera />
@@ -163,6 +188,62 @@ const MessageRight = ({ overflow }) => {
           </div>
         </div>
       </div>
+
+      {/* modal part  */}
+      <div>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+        >
+          <div className="text-2xl text-primary-color">
+            <button onClick={closeModal}>
+              <RxCross2 />
+            </button>
+          </div>
+
+          <div className="w-full">
+            <div class="flex  items-center justify-center">
+              <label
+                for="dropzone-file"
+                class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+              >
+                <div class="flex flex-col items-center justify-center pb-6 pt-5">
+                  <svg
+                    aria-hidden="true"
+                    class="mb-3 h-10 w-10 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    ></path>
+                  </svg>
+                  <p class="mb-2 text-sm text-gray-500 ">
+                    <span class="font-semibold">Click to upload</span> or drag
+                    and drop
+                  </p>
+                  <p class="text-xs text-gray-500 ">
+                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  </p>
+                </div>
+                <input
+                  id="dropzone-file"
+                  type="file"
+                  class="hidden"
+                  onChange={HandleUploadImage}
+                />
+              </label>
+            </div>
+          </div>
+        </Modal>
+      </div>
+      {/* modal part */}
     </div>
   );
 };
