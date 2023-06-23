@@ -10,7 +10,7 @@ import { CiSettings } from "react-icons/ci";
 const Homeleft = ({ active }) => {
   const auth = getAuth();
   const navigate = useNavigate();
-  const [DisplayName, setDisplayName] = useState(null);
+  const [DisplayName, setDisplayName] = useState("");
   const [photurl, setphoturl] = useState(null);
 
   useEffect(() => {
@@ -22,6 +22,7 @@ const Homeleft = ({ active }) => {
       }
     });
   }, []);
+  console.log("DisplayName", DisplayName);
 
   // Sign out functonality with firebase sign out function
 

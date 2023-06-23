@@ -5,8 +5,15 @@ import { HiOutlineCamera } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import {
+  getStorage,
+  ref as storeRef,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import Modal from "react-modal";
+
 const customStyles = {
   content: {
     top: "50%",
@@ -18,17 +25,20 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
+
 const MessageRight = ({ overflow }) => {
   const db = getDatabase();
   const auth = getAuth();
+  const storage = getStorage();
 
   const [msg, setmsg] = useState("");
   const [image, setimage] = useState(null);
+  const [progress, setprogress] = useState(null);
   const [msgStrogestate, setmsgStrogestate] = useState([]);
 
-  let userInfo = useSelector((state) => state.chat);
+  let userInfo = useSelector((state) => state.chat.value);
   const userinfofromLocalStriage = JSON.parse(localStorage.getItem("userinfo"));
-  const { name, status, id } = userInfo.value;
+  let { name, status, id } = userInfo;
 
   // catch data from input field
 
@@ -99,7 +109,58 @@ const MessageRight = ({ overflow }) => {
   const HandleUploadImage = (event) => {
     setimage(event.target.files[0]);
   };
-  console.log("image", image.name);
+
+  // Upload and download image on single database
+  const HandleSendImage = () => {
+    const storageRef = storeRef(storage, "Chatimages/" + image.name);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+
+    // this function work for upload and download image
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progresper = Math.floor(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setprogress(progresper);
+        console.log("Upload is " + progresper + "% done");
+      },
+
+      (error) => {
+        console.log("iamge upload failed ", error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at this downloadURL  :", downloadURL);
+
+          // trough image on firebase realtime database
+          if (image != "") {
+            if (status == "singlemsg") {
+              const postmsgRef = ref(db, "Singlemsg/");
+              set(push(postmsgRef), {
+                whoSendId: auth.currentUser.uid,
+                whoSendName: auth.currentUser.displayName,
+                whoRecivedId: id,
+                whoRecivedName: name,
+                ChatImg: downloadURL,
+                date: `
+                            ${new Date().getFullYear()}- 
+                            ${new Date().getMonth() + 1}- 
+                            ${new Date().getDate()}  
+                            ${new Date().getHours()}:
+                            ${new Date().getMinutes()}:
+                            ${new Date().getSeconds()}`,
+              }).then(() => {
+                setimage(null);
+                setprogress(null);
+                setIsOpen(false);
+              });
+            }
+          }
+        });
+      }
+    );
+  };
 
   return (
     <div>
@@ -127,7 +188,7 @@ const MessageRight = ({ overflow }) => {
                 <p className="font-intel text-sm font-medium text-primary-color">
                   {userinfofromLocalStriage.name
                     ? userinfofromLocalStriage.name
-                    : name}
+                    : userInfo.name}
                 </p>
               </div>
               <div className="text-2xl font-semibold text-primary-color ">
@@ -198,17 +259,19 @@ const MessageRight = ({ overflow }) => {
         >
           <div className="text-2xl text-primary-color">
             <button onClick={closeModal}>
-              <RxCross2 />
+              <div className="mb-2 mr-2 rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br ">
+                <RxCross2 />
+              </div>
             </button>
           </div>
 
           <div className="w-full">
-            <div class="flex  items-center justify-center">
+            <div className="flex  items-center justify-center">
               <label
                 for="dropzone-file"
-                class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
               >
-                <div class="flex flex-col items-center justify-center pb-6 pt-5">
+                <div className="flex flex-col items-center justify-center pb-6 pt-5">
                   <svg
                     aria-hidden="true"
                     class="mb-3 h-10 w-10 text-gray-400"
@@ -235,10 +298,30 @@ const MessageRight = ({ overflow }) => {
                 <input
                   id="dropzone-file"
                   type="file"
-                  class="hidden"
+                  className="hidden"
                   onChange={HandleUploadImage}
                 />
               </label>
+            </div>
+            <div class="mt-5 w-full rounded-full bg-gray-200">
+              <div
+                className="rounded-full bg-gradient-to-r from-purple-800 via-green-400 to-green-600 p-2  text-center text-xs font-medium leading-none text-blue-100 "
+                style={{ width: `${progress}%` }}
+              >
+                {progress == null ? `` : `${progress}%`}
+              </div>
+            </div>
+
+            <div className="mt-10 flex justify-evenly">
+              <div>
+                <button
+                  type="submit"
+                  onClick={HandleSendImage}
+                  className="mb-2 mr-2 rounded-lg bg-gradient-to-r from-green-400 via-green-500 to-green-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br  "
+                >
+                  Send
+                </button>
+              </div>
             </div>
           </div>
         </Modal>
