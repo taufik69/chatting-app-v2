@@ -202,18 +202,44 @@ const MessageRight = ({ overflow }) => {
       <div className=" m-4  h-[500px]  flex-col overflow-y-scroll">
         {msgStrogestate.map((item) =>
           item.whoSendId == auth.currentUser.uid ? (
-            <div className="flex justify-end">
-              <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-primary-color via-primary-color to-purple-700  px-[30px] py-[7px]">
-                <div className="text-[18px] font-normal text-white">
+            item.msg ? (
+              <div className="flex justify-end">
+                <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-primary-color via-primary-color to-purple-700  px-[30px] py-[7px]">
+                  <div className="text-[18px] font-normal text-white">
+                    {item.msg}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-end">
+                <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-gray-300  to-gray-300 px-[5px] py-[4px]">
+                  <div>
+                    <img
+                      className="h-[200px] w-[200px]"
+                      src={item.ChatImg}
+                      alt={item.ChatImg}
+                    />
+                  </div>
+                </div>
+              </div>
+            )
+          ) : item.msg ? (
+            <div className="flex justify-start">
+              <div className=" m-5 items-start  rounded bg-gradient-to-r from-blue-700  to-gray-700 px-[30px] py-[7px] text-teal-50">
+                <div className="text-neutral-800 text-[18px] font-normal">
                   {item.msg}
                 </div>
               </div>
             </div>
           ) : (
             <div className="flex justify-start">
-              <div className=" m-5 items-start  rounded bg-gradient-to-r from-blue-700  to-gray-700 px-[30px] py-[7px] text-teal-50">
-                <div className="text-neutral-800 text-[18px] font-normal">
-                  {item.msg}
+              <div className="m-2 items-start  rounded bg-gradient-to-r from-gray-300  to-gray-300 px-[5px] py-[4px] text-teal-50">
+                <div>
+                  <img
+                    src={item.ChatImg}
+                    alt={item.ChatImg}
+                    className="h-[200px] w-[200px]"
+                  />
                 </div>
               </div>
             </div>
