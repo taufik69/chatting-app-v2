@@ -10,7 +10,12 @@ const Message = () => {
           <Homeleft active="message" />
         </div>
         <div className="w-1/3  px-10 py-6">
-          <Friends title={"Friends"} SearchNeed={true} overflow={false} />
+          <Friends
+            title={"Friends"}
+            SearchNeed={true}
+            overflow={false}
+            groupButton={true}
+          />
         </div>
         <div className=" w-1/2  border-2">
           <MessageRight overflow={true} />

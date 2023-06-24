@@ -198,7 +198,6 @@ const MessageRight = ({ overflow }) => {
           </li>
         </ul>
       </div>
-
       <div className=" m-4  h-[500px]  flex-col overflow-y-scroll">
         {msgStrogestate.map((item) =>
           item.whoSendId == auth.currentUser.uid ? (
@@ -246,7 +245,6 @@ const MessageRight = ({ overflow }) => {
           )
         )}
       </div>
-
       <div className="p-3">
         <div className="flex">
           <div className="relative w-full">
@@ -275,7 +273,6 @@ const MessageRight = ({ overflow }) => {
           </div>
         </div>
       </div>
-
       {/* modal part  */}
       <div>
         <Modal

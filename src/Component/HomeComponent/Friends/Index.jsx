@@ -3,6 +3,14 @@ import Search from "../Search/Index";
 import { getAuth } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { ActiveChatReducer } from "../../../Slices/ChatSlice";
+import { RxCross2 } from "react-icons/rx";
+import Modal from "react-modal";
+import {
+  getStorage,
+  ref as ref_storage,
+  uploadString,
+  getDownloadURL,
+} from "firebase/storage";
 import {
   getDatabase,
   ref,
@@ -11,13 +19,40 @@ import {
   push,
   remove,
 } from "firebase/database";
-const Friends = ({ title, SearchNeed, overflow }) => {
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    width: "700px",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
+const Friends = ({ title, SearchNeed, overflow, groupButton }) => {
   const db = getDatabase();
   const auth = getAuth();
+  const storage = getStorage();
   const dispatch = useDispatch();
 
   let [friendList, setfriendList] = useState([]);
   const [blockState, setblockState] = useState(false);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [groupImg, setgroupImg] = React.useState(null);
+  const [groupName, setgroupName] = React.useState("");
+  const [groupTagName, setgroupTagName] = React.useState("");
+  const [ErrorNameError, setErrorNameError] = React.useState("");
+  const [ErrorTagError, setErrorTagError] = React.useState("");
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     const userRef = ref(db, "Friends/");
@@ -66,17 +101,85 @@ const Friends = ({ title, SearchNeed, overflow }) => {
       userinfo.name = item.senderName;
     } else {
       // console.log("reciver need");
-      userinfo.status = "singlemsg";
+      userinfo.status = "groupmsg";
       userinfo.id = item.reciverUid;
       userinfo.name = item.reciverName;
     }
     dispatch(ActiveChatReducer(userinfo));
     localStorage.setItem("userinfo", JSON.stringify(userinfo));
   };
+
+  // Handle HandleGroupImg functionality
+
+  const HandleGroupImg = (event) => {
+    setgroupImg(event.target.files[0]);
+  };
+
+  // HandleCreateGroup and send data from database
+  const HandleCreateGroup = () => {
+    if (!groupName) {
+      setErrorNameError("GroupName missing");
+    } else if (!groupTagName) {
+      setErrorTagError("group tag Missing");
+    } else {
+      setErrorNameError("");
+      setErrorTagError("");
+      // upload group info in  the database
+      const storageRef = ref_storage(
+        storage,
+        "Group_img/" + auth.currentUser.uid
+      );
+      uploadString(storageRef, groupImg)
+        .then((snapshot) => {
+          // console.log('snapshot ', snapshot)
+        })
+        .then(() => {
+          const starsRef = ref_storage(storageRef);
+          getDownloadURL(starsRef)
+            .then((url) => {
+              console.log(
+                "base 64 image download url succesfull 1st statge",
+                url
+              );
+              set(push(ref(db, "Grouplist/")), {
+                GroupName: groupName,
+                GroupTagName: groupTagName,
+                AdminId: auth.currentUser.uid,
+                AdminName: auth.currentUser.displayName,
+                GroupPhotourl: url,
+              });
+            })
+            .then(() => {
+              setgroupImg(null);
+              setIsOpen(true);
+            })
+            .catch((error) => {
+              console.log("error from goDownloadURL", error);
+            });
+        });
+    }
+  };
+
   return (
     <>
-      <div className="">
-        <h2 className="mb-3 font-intel text-2xl font-semibold">{title}</h2>
+      <div>
+        <div className="flex justify-between">
+          <div>
+            <h2 className="mb-3 font-intel text-2xl font-semibold">{title}</h2>
+          </div>
+          <div>
+            {groupButton && (
+              <button
+                type="button"
+                onClick={openModal}
+                class="mb-2 mr-2 rounded-lg bg-gradient-to-r from-green-400 via-green-500  to-green-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br"
+              >
+                Group
+              </button>
+            )}
+          </div>
+        </div>
+
         {SearchNeed ? <Search /> : null}
         <div
           className={
@@ -156,6 +259,91 @@ const Friends = ({ title, SearchNeed, overflow }) => {
             </div>
           )}
         </div>
+        {/* modal part  */}
+        <div>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+          >
+            <div className="text-2xl text-primary-color">
+              <button onClick={closeModal}>
+                <div className="mb-2 mr-2 rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br ">
+                  <RxCross2 />
+                </div>
+              </button>
+            </div>
+
+            <div className="w-full">
+              <div>
+                <div class="mb-6 w-full">
+                  <label
+                    for="success"
+                    class="mb-2 block text-sm font-medium text-green-700 dark:text-green-500"
+                  >
+                    Group name
+                  </label>
+                  <input
+                    type="text"
+                    id="success"
+                    class="block w-full rounded-lg border border-green-500 bg-green-50 p-2.5 text-sm text-green-900 placeholder-green-700 "
+                    placeholder="Success input"
+                    onChange={(e) => setgroupName(e.target.value)}
+                    required
+                  />
+                  <div className="text-red-700">
+                    <p>{ErrorNameError ? ErrorNameError : ""}</p>
+                  </div>
+                </div>
+                <div class="mb-6 w-full">
+                  <label
+                    for="success"
+                    class="mb-2 block text-sm font-medium text-green-700 dark:text-green-500"
+                  >
+                    Group Tag Line
+                  </label>
+                  <input
+                    type="text"
+                    id="success"
+                    class="block w-full rounded-lg border border-green-500 bg-green-50 p-2.5 text-sm text-green-900 placeholder-green-700 "
+                    placeholder="Success input"
+                    onChange={(e) => setgroupTagName(e.target.value)}
+                    required
+                  />
+                  <div className="text-red-700">
+                    <p> {ErrorTagError ? ErrorTagError : null} </p>
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    class="mb-2 block text-sm font-medium text-gray-900 "
+                    for="file_input"
+                  >
+                    Upload file
+                  </label>
+                  <input
+                    class="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 "
+                    id="file_input"
+                    onChange={HandleGroupImg}
+                    type="file"
+                  />
+                </div>
+
+                <div className="mt-5">
+                  <button
+                    type="submit"
+                    onClick={HandleCreateGroup}
+                    class="mb-2 mr-2 w-full rounded-lg bg-gradient-to-r from-green-400 via-green-500  to-green-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br"
+                  >
+                    Create Group
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        </div>
+        {/* modal part */}
       </div>
     </>
   );

@@ -22,7 +22,6 @@ const Homeleft = ({ active }) => {
       }
     });
   }, []);
-  console.log("DisplayName", DisplayName);
 
   // Sign out functonality with firebase sign out function
 

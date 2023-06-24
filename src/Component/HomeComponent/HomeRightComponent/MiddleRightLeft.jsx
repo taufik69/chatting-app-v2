@@ -16,7 +16,7 @@ const MiddleRightLeft = () => {
           <Group title="Group" SearchNeed={true} />
         </div>
         <div className="h-[40%] w-[32%]">
-          <Friends title="Friends" SearchNeed={true} />
+          <Friends title="Friends" SearchNeed={true} groupButton={false} />
         </div>
         <div className="h-[40%] w-[32%]">
           <People title="People" SearchNeed={true} />
