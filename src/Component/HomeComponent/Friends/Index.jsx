@@ -7,9 +7,9 @@ import { RxCross2 } from "react-icons/rx";
 import Modal from "react-modal";
 import {
   getStorage,
-  ref as ref_storage,
-  uploadString,
+  ref as storeRef,
   getDownloadURL,
+  uploadBytesResumable,
 } from "firebase/storage";
 import {
   getDatabase,
@@ -45,6 +45,7 @@ const Friends = ({ title, SearchNeed, overflow, groupButton }) => {
   const [groupTagName, setgroupTagName] = React.useState("");
   const [ErrorNameError, setErrorNameError] = React.useState("");
   const [ErrorTagError, setErrorTagError] = React.useState("");
+  const [progress, setprogress] = useState(null);
 
   function openModal() {
     setIsOpen(true);
@@ -125,38 +126,48 @@ const Friends = ({ title, SearchNeed, overflow, groupButton }) => {
       setErrorNameError("");
       setErrorTagError("");
       // upload group info in  the database
-      const storageRef = ref_storage(
+
+      const storageRef = storeRef(
         storage,
-        "Group_img/" + auth.currentUser.uid
+        "GroupImages/" + auth.currentUser.uid
       );
-      uploadString(storageRef, groupImg)
-        .then((snapshot) => {
-          // console.log('snapshot ', snapshot)
-        })
-        .then(() => {
-          const starsRef = ref_storage(storageRef);
-          getDownloadURL(starsRef)
-            .then((url) => {
-              console.log(
-                "base 64 image download url succesfull 1st statge",
-                url
-              );
-              set(push(ref(db, "Grouplist/")), {
-                GroupName: groupName,
-                GroupTagName: groupTagName,
-                AdminId: auth.currentUser.uid,
-                AdminName: auth.currentUser.displayName,
-                GroupPhotourl: url,
-              });
+      const uploadTask = uploadBytesResumable(storageRef, groupImg);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progresper = Math.floor(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setprogress(progresper);
+          console.log("Upload is " + progresper + "% done");
+        },
+
+        (error) => {
+          console.log("iamge upload failed ", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref)
+            .then((downloadURL) => {
+              console.log("File available at this downloadURL  :", downloadURL);
+
+              // trough image on firebase realtime database
+              // set(push(ref(db, "Grouplist/")), {
+              //   GroupName: groupName,
+              //   GroupTagName: groupTagName,
+              //   AdminId: auth.currentUser.uid,
+              //   AdminName: auth.currentUser.displayName,
+              //   GroupPhotourl: downloadURL,
+              // });
             })
             .then(() => {
-              setgroupImg(null);
-              setIsOpen(true);
-            })
-            .catch((error) => {
-              console.log("error from goDownloadURL", error);
+              console.log("from last vanish part");
+              groupImg(null);
+              closeModal();
+              progress(null);
             });
-        });
+        }
+      );
     }
   };
 
@@ -329,6 +340,16 @@ const Friends = ({ title, SearchNeed, overflow, groupButton }) => {
                     type="file"
                   />
                 </div>
+                {progress == null ? null : (
+                  <div class="mt-5 w-full rounded-full bg-gray-200">
+                    <div
+                      className="rounded-full bg-gradient-to-r from-purple-800 via-green-400 to-green-600 p-2  text-center text-xs font-medium leading-none text-blue-100 "
+                      style={{ width: `${progress}%` }}
+                    >
+                      {progress == null ? `` : `${progress}%`}
+                    </div>
+                  </div>
+                )}
 
                 <div className="mt-5">
                   <button

@@ -292,12 +292,12 @@ const MessageRight = ({ overflow }) => {
             <div className="flex  items-center justify-center">
               <label
                 for="dropzone-file"
-                class="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
+                className="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
               >
                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
                   <svg
                     aria-hidden="true"
-                    class="mb-3 h-10 w-10 text-gray-400"
+                    className="mb-3 h-10 w-10 text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
