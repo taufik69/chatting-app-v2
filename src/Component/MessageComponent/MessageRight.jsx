@@ -161,6 +161,7 @@ const MessageRight = ({ overflow }) => {
       }
     );
   };
+  console.log("msgStrogestate", msgStrogestate);
 
   return (
     <div>
@@ -201,26 +202,52 @@ const MessageRight = ({ overflow }) => {
       <div className=" m-4  h-[500px]  flex-col overflow-y-scroll">
         {msgStrogestate.map((item) =>
           item.whoSendId == auth.currentUser.uid ? (
-            item.msg ? (
-              <div className="flex justify-end">
-                <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-primary-color via-primary-color to-purple-700  px-[30px] py-[7px]">
-                  <div className="text-[18px] font-normal text-white">
-                    {item.msg}
-                  </div>
+            (<li className="py-3 pb-3">
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0 ">
+                  <img
+                    className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
+                    src="../../../../public/images/Home/oggy.gif"
+                    alt="public/images/Home/oggy.gif"
+                  />
+                </div>
+                <div className="relative min-w-0 flex-1">
+                  <p className="font-intel text-sm font-medium text-primary-color">
+                    Neil Sims
+                  </p>
+                  <p className="truncate text-sm text-gray-500 ">
+                    email@flowbite.com
+                  </p>
+                  <p className="absolute right-5 top-5 text-xs text-gray-500">
+                    5.55 pm
+                  </p>
+                </div>
+                <div className="inline-flex items-center text-xl font-semibold text-primary-color">
+                  <BsThreeDotsVertical className="mr-4" />
                 </div>
               </div>
-            ) : (
-              <div className="flex justify-end">
-                <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-gray-300  to-gray-300 px-[5px] py-[4px]">
-                  <div>
-                    <img
-                      className="h-[200px] w-[200px]"
-                      src={item.ChatImg}
-                      alt={item.ChatImg}
-                    />
+            </li>)(
+              item.msg ? (
+                <div className="flex justify-end">
+                  <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-primary-color via-primary-color to-purple-700  px-[30px] py-[7px]">
+                    <div className="text-[18px] font-normal text-white">
+                      {item.msg}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="flex justify-end">
+                  <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-gray-300  to-gray-300 px-[5px] py-[4px]">
+                    <div>
+                      <img
+                        className="h-[200px] w-[200px]"
+                        src={item.ChatImg}
+                        alt={item.ChatImg}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )
             )
           ) : item.msg ? (
             <div className="flex justify-start">
@@ -245,6 +272,7 @@ const MessageRight = ({ overflow }) => {
           )
         )}
       </div>
+
       <div className="p-3">
         <div className="flex">
           <div className="relative w-full">
@@ -326,14 +354,18 @@ const MessageRight = ({ overflow }) => {
                 />
               </label>
             </div>
-            <div class="mt-5 w-full rounded-full bg-gray-200">
-              <div
-                className="rounded-full bg-gradient-to-r from-purple-800 via-green-400 to-green-600 p-2  text-center text-xs font-medium leading-none text-blue-100 "
-                style={{ width: `${progress}%` }}
-              >
-                {progress == null ? `` : `${progress}%`}
+            {progress == null ? (
+              ""
+            ) : (
+              <div class="mt-5 w-full rounded-full bg-gray-200">
+                <div
+                  className="rounded-full bg-gradient-to-r from-purple-800 via-green-400 to-green-600 p-2  text-center text-xs font-medium leading-none text-blue-100 "
+                  style={{ width: `${progress}%` }}
+                >
+                  {progress == null ? `` : `${progress}%`}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="mt-10 flex justify-evenly">
               <div>
