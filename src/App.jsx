@@ -2,6 +2,7 @@ import Registration from "./Pages/Registration/Index";
 import Login from "./Pages/Login/Index";
 import Home from "./Pages/Home/Index";
 import Message from "./Pages/Message/Index";
+import Group from "./Pages/GroupPage/Index";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />}></Route>
       <Route path="/home" element={<Home />}></Route>
       <Route path="/message" element={<Message />}></Route>
+      <Route path="/group" element={<Group />}></Route>
     </Route>
   )
 );

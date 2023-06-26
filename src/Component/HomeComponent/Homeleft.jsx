@@ -114,6 +114,7 @@ const Homeleft = ({ active }) => {
                 <span className="text-md font-intel font-normal">Message</span>
               </Link>
             </li>
+
             <li
               className={
                 active === "group"
@@ -121,7 +122,7 @@ const Homeleft = ({ active }) => {
                   : ""
               }
             >
-              <Link to="#" className="flex items-center gap-x-2">
+              <Link to="/group" className="flex items-center gap-x-2">
                 <BiGroup className="text-xl" />
                 <span className="text-md font-intel font-normal">Group</span>
               </Link>
