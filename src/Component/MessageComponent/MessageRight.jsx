@@ -57,7 +57,6 @@ const MessageRight = ({ overflow }) => {
           whoRecivedId: id,
           whoRecivedName: name,
           msg: msg,
-
           date: `
                         ${new Date().getFullYear()}-
                         ${new Date().getMonth() + 1}-
@@ -144,9 +143,9 @@ const MessageRight = ({ overflow }) => {
                 whoRecivedName: name,
                 ChatImg: downloadURL,
                 date: `
-                            ${new Date().getFullYear()}- 
-                            ${new Date().getMonth() + 1}- 
-                            ${new Date().getDate()}  
+                            ${new Date().getFullYear()}-
+                            ${new Date().getMonth() + 1}-
+                            ${new Date().getDate()}
                             ${new Date().getHours()}:
                             ${new Date().getMinutes()}:
                             ${new Date().getSeconds()}`,
@@ -202,52 +201,26 @@ const MessageRight = ({ overflow }) => {
       <div className=" m-4  h-[500px]  flex-col overflow-y-scroll">
         {msgStrogestate.map((item) =>
           item.whoSendId == auth.currentUser.uid ? (
-            (<li className="py-3 pb-3">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 ">
-                  <img
-                    className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                    src="../../../../public/images/Home/oggy.gif"
-                    alt="public/images/Home/oggy.gif"
-                  />
-                </div>
-                <div className="relative min-w-0 flex-1">
-                  <p className="font-intel text-sm font-medium text-primary-color">
-                    Neil Sims
-                  </p>
-                  <p className="truncate text-sm text-gray-500 ">
-                    email@flowbite.com
-                  </p>
-                  <p className="absolute right-5 top-5 text-xs text-gray-500">
-                    5.55 pm
-                  </p>
-                </div>
-                <div className="inline-flex items-center text-xl font-semibold text-primary-color">
-                  <BsThreeDotsVertical className="mr-4" />
+            item.msg ? (
+              <div className="flex justify-end">
+                <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-primary-color via-primary-color to-purple-700  px-[30px] py-[7px]">
+                  <div className="text-[18px] font-normal text-white">
+                    {item.msg}
+                  </div>
                 </div>
               </div>
-            </li>)(
-              item.msg ? (
-                <div className="flex justify-end">
-                  <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-primary-color via-primary-color to-purple-700  px-[30px] py-[7px]">
-                    <div className="text-[18px] font-normal text-white">
-                      {item.msg}
-                    </div>
+            ) : (
+              <div className="flex justify-end">
+                <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-gray-300  to-gray-300 px-[5px] py-[4px]">
+                  <div>
+                    <img
+                      className="h-[200px] w-[200px]"
+                      src={item.ChatImg}
+                      alt={item.ChatImg}
+                    />
                   </div>
                 </div>
-              ) : (
-                <div className="flex justify-end">
-                  <div className=" m-5 mt-20 items-end rounded bg-gradient-to-r from-gray-300  to-gray-300 px-[5px] py-[4px]">
-                    <div>
-                      <img
-                        className="h-[200px] w-[200px]"
-                        src={item.ChatImg}
-                        alt={item.ChatImg}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )
+              </div>
             )
           ) : item.msg ? (
             <div className="flex justify-start">

@@ -91,27 +91,41 @@ const Friends = ({ title, SearchNeed, overflow, groupButton }) => {
         remove(ref(db, "Friends/" + blockitem.id));
       });
       setblockState(!blockState);
+    } else {
+      set(push(ref(db, "Block/")), {
+        blockby: blockitem.senderName,
+        blockbyId: blockitem.Senderid,
+        block: blockitem.reciverName,
+        blockId: blockitem.reciverUid,
+        blockDate: `${new Date().getFullYear()} - ${
+          new Date().getMonth() + 1
+        } - ${new Date().getDate()}`,
+      }).then(() => {
+        remove(ref(db, "Friends/" + blockitem.id));
+      });
+      setblockState(!blockState);
     }
   };
   // reduer HandleActiveChatReducer function machanism
   const HandleActiveChatReducer = (item) => {
-    let userinfo = {};
     if (auth.currentUser.uid == item.reciverUid) {
-      // console.log('reciver don\'t need');
-      userinfo.status = "singlemsg";
-      userinfo.id = item.Senderid;
-      userinfo.name = item.senderName;
+      dispatch(
+        ActiveChatReducer({
+          id: item.Senderid,
+          name: item.senderName,
+          status: "singlemsg",
+        })
+      );
     } else {
-      // console.log("reciver need");
-      userinfo.status = "groupmsg";
-      userinfo.id = item.reciverUid;
-      userinfo.name = item.reciverName;
+      dispatch(
+        ActiveChatReducer({
+          id: item.reciverUid,
+          name: item.reciverName,
+          status: "singlemsg",
+        })
+      );
     }
-    dispatch(ActiveChatReducer(userinfo));
-    localStorage.setItem("userinfo", JSON.stringify(userinfo));
   };
-
-  // Handle HandleGroupImg functionality
 
   const HandleGroupImg = (event) => {
     setgroupImg(event.target.files[0]);
