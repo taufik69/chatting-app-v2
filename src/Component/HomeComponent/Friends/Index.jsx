@@ -143,10 +143,8 @@ const Friends = ({ title, SearchNeed, overflow, groupButton }) => {
       setErrorTagError("");
       // upload group info in  the database
 
-      const storageRef = storeRef(
-        storage,
-        "GroupImages/" + auth.currentUser.uid
-      );
+      const storageRef = storeRef(storage, `GroupImages/ ${groupImg.name}`);
+
       const uploadTask = uploadBytesResumable(storageRef, groupImg);
 
       uploadTask.on(
@@ -216,7 +214,7 @@ const Friends = ({ title, SearchNeed, overflow, groupButton }) => {
         >
           <ul className="max-w-md divide-y divide-gray-200 py-3">
             {friendList.map((item) => (
-              <li className="py-3 pb-3 sm:pb-5">
+              <li className="py-3 pb-3 sm:pb-5" key={item.id}>
                 <div
                   className="flex cursor-pointer items-center space-x-4"
                   onClick={() => HandleActiveChatReducer(item)}

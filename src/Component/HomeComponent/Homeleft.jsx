@@ -16,9 +16,9 @@ const Homeleft = ({ active }) => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        let { displayName, photoURL } = user;
-        setDisplayName(displayName);
-        setphoturl(photoURL);
+        // let { displayName, photoURL } = user;
+        setDisplayName(user.displayName);
+        setphoturl(user.photoURL);
       }
     });
   }, []);
@@ -80,7 +80,7 @@ const Homeleft = ({ active }) => {
 
           <div className=" px-3 font-intel">
             <p className=" ml-2 text-xl font-semibold  text-primary-color">
-              {DisplayName}
+              {auth.currentUser.displayName == DisplayName && DisplayName}
             </p>
             <p className="text-md  ml-2 font-normal text-[#7A7A7A]">Active</p>
           </div>

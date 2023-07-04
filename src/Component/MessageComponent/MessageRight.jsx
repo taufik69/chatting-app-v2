@@ -160,7 +160,7 @@ const MessageRight = ({ overflow }) => {
       }
     );
   };
-  console.log("msgStrogestate", msgStrogestate);
+  // console.log("msgStrogestate", msgStrogestate);
 
   return (
     <div>

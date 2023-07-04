@@ -72,9 +72,9 @@ const People = ({ title, SearchNeed }) => {
         <div className=" mt-6 h-[225px] overflow-y-scroll">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
             {userlistitem.map(
-              (item) =>
+              (item, i) =>
                 auth.currentUser.uid !== item.uid && (
-                  <li className="py-3 pb-3 sm:pb-5">
+                  <li className="py-3 pb-3 sm:pb-5" key={i}>
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0 ">
                         <img

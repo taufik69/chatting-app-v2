@@ -11,9 +11,12 @@ export const ActiveSlice = createSlice({
     ActiveChatReducer: (state, action) => {
       state.value = action.payload;
     },
+    GroupChat: (state, action) => {
+      state.value = action.payload;
+    },
   },
 });
 
-export const { ActiveChatReducer } = ActiveSlice.actions;
+export const { ActiveChatReducer, GroupChat } = ActiveSlice.actions;
 
 export default ActiveSlice.reducer;
