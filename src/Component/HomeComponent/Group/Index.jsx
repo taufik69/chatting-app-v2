@@ -4,14 +4,50 @@ import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { GroupChat } from "../../../Slices/ChatSlice";
 import { useDispatch } from "react-redux";
-
+import Modal from "react-modal";
+import { RxCross2 } from "react-icons/rx";
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    width: "700px",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 const Group = ({ title, SearchNeed }) => {
   const db = getDatabase();
   const auth = getAuth();
   const dispatch = useDispatch();
-  const [grouplist, setgrouplist] = useState([]);
-  let [isActiveFriendRequest, setisActiveFriendRequest] = useState(true);
+  let [grouplist, setgrouplist] = useState([]);
+  const [modalIsOpen, setIsOpen] = useState(false);
 
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  // Hnadle accept group request
+  const HandleAcceptGroupRequest = (item) => {
+    console.log("HandleAcceptRequest item is :", item);
+    // set(push(ref(db, "GroupJoinRequest/")), {
+    //   AdminId: item.AdminId,
+    //   AdminName: item.AdminName,
+    //   GroupKey: item.GroupKey,
+    //   GroupName: item.GroupName,
+    //   GroupTagName: item.GroupTagName,
+    //   GroupjoinMember: auth.currentUser.displayName,
+    //   GroupjoinMemberid: auth.currentUser.uid,
+    //   GroupjoinMemberPhoto: auth.currentUser.photoURL,
+    // }).then(() => {
+    //   setGroupJoinButton(false);
+    // });
+  };
   // Fetching data from single message database zone
   useEffect(() => {
     const starCountRef = ref(db, "Grouplist/");
@@ -45,22 +81,6 @@ const Group = ({ title, SearchNeed }) => {
     dispatch(GroupChat(userinfo));
   };
 
-  // Hnadle accept group request
-  const HandleAcceptGroupRequest = (item) => {
-    console.log("HandleAcceptRequest item is :", item);
-    // set(push(ref(db, "GroupJoinRequest/")), {
-    //   AdminId: item.AdminId,
-    //   AdminName: item.AdminName,
-    //   GroupKey: item.GroupKey,
-    //   GroupName: item.GroupName,
-    //   GroupTagName: item.GroupTagName,
-    //   GroupjoinMember: auth.currentUser.displayName,
-    //   GroupjoinMemberid: auth.currentUser.uid,
-    //   // GroupjoinMemberPhoto: auth.currentUser.photoURL,
-    // });
-    setisActiveFriendRequest(false);
-  };
-
   return (
     <>
       <div>
@@ -68,38 +88,70 @@ const Group = ({ title, SearchNeed }) => {
         {SearchNeed ? <Search /> : null}
         <div className="mt-6 h-[225px] cursor-pointer overflow-y-scroll">
           <ul className="max-w-md divide-y divide-gray-200 py-3">
-            {grouplist.map((item, i) => (
-              <li className="py-3 pb-3 sm:pb-5" key={i}>
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0 ">
-                    <img
-                      className=" mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                      src={item.GroupPhotourl}
-                      alt={item.GroupPhotourl}
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-intel text-sm font-medium text-primary-color">
-                      {item.GroupName}
-                    </p>
-                    <p className="truncate text-sm text-gray-500 ">
-                      {item.GroupTagName}
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    {isActiveFriendRequest && (
-                      <button
-                        type="button"
-                        onClick={() => HandleAcceptGroupRequest(item)}
-                        className=" mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
-                      >
-                        join
-                      </button>
-                    )}
+            {grouplist.map(
+              (item, i) =>
+                item.AdminId != auth.currentUser.uid && (
+                  <li className="py-3 pb-3 sm:pb-5" key={i}>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex-shrink-0 ">
+                        <img
+                          className=" mr-2 h-10 w-10 rounded-full border-x border-t border-black"
+                          src={item.GroupPhotourl}
+                          alt={item.GroupPhotourl}
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-intel text-sm font-medium text-primary-color">
+                          {item.GroupName}
+                        </p>
+                        <p className="truncate text-sm text-gray-500 ">
+                          {item.GroupTagName}
+                        </p>
+                      </div>
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          onClick={openModal}
+                          className=" mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
+                        >
+                          join
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                )
+            )}
+            <div>
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                style={customStyles}
+              >
+                <div className="text-2xl text-primary-color">
+                  <button onClick={closeModal}>
+                    <div className="mb-2  rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br ">
+                      <RxCross2 />
+                    </div>
+                  </button>
+                </div>
+
+                <div className="w-full">
+                  <div className=" relative mt-5">
+                    <div>
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          onClick={() => HandleAcceptGroupRequest(item)}
+                          className=" mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
+                        >
+                          join
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </li>
-            ))}
+              </Modal>
+            </div>
           </ul>
           {grouplist.length == 0 && (
             <div
@@ -127,6 +179,9 @@ const Group = ({ title, SearchNeed }) => {
             </div>
           )}
         </div>
+        {/* modal part  */}
+
+        {/* modal part */}
       </div>
     </>
   );

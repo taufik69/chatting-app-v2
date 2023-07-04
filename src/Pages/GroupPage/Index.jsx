@@ -8,7 +8,7 @@ const Index = () => {
       <div className="">
         <Homeleft active="group" />
       </div>
-      <div className="h-screet mt-8 w-[60%]">
+      <div className="mt-8  w-[60%]">
         <Group title="Group" SearchNeed={true} />
       </div>
       <disv className="w-full">
