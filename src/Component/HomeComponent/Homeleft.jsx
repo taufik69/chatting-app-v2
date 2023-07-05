@@ -16,9 +16,9 @@ const Homeleft = ({ active }) => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // let { displayName, photoURL } = user;
-        setDisplayName(user.displayName);
-        setphoturl(user.photoURL);
+        let { displayName, photoURL } = user;
+        setDisplayName(displayName);
+        setphoturl(photoURL);
       }
     });
   }, []);
@@ -80,7 +80,7 @@ const Homeleft = ({ active }) => {
 
           <div className=" px-3 font-intel">
             <p className=" ml-2 text-xl font-semibold  text-primary-color">
-              {auth.currentUser.displayName == DisplayName && DisplayName}
+              {DisplayName}
             </p>
             <p className="text-md  ml-2 font-normal text-[#7A7A7A]">Active</p>
           </div>
@@ -130,12 +130,12 @@ const Homeleft = ({ active }) => {
 
             <li
               className={
-                active === "friends"
+                active === "friend"
                   ? "relative  w-[120%]   border-l  bg-primary-color  py-3 pr-2 text-white after:absolute after:-left-10 after:top-0 after:h-full after:w-10 after:rounded-l-md after:bg-primary-color"
                   : ""
               }
             >
-              <Link to="#" className="flex items-center gap-x-2">
+              <Link to="/friend" className="flex items-center gap-x-2">
                 <FaUserFriends className="text-xl" />
                 <span className="text-md font-intel font-normal">Friends</span>
               </Link>
@@ -148,7 +148,7 @@ const Homeleft = ({ active }) => {
                   : ""
               }
             >
-              <Link to="#" className="flex items-center gap-x-2">
+              <Link to="/people" className="flex items-center gap-x-2">
                 <GrAppsRounded className="text-xl" />
                 <span className="text-md font-intel font-normal">People</span>
               </Link>
@@ -161,7 +161,7 @@ const Homeleft = ({ active }) => {
                   : ""
               }
             >
-              <Link to="#" className="flex items-center gap-x-2">
+              <Link to="/setting" className="flex items-center gap-x-2">
                 <CiSettings className="text-2xl" />
                 <span className="text-md font-intel font-normal">Setting</span>
               </Link>

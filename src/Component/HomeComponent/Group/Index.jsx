@@ -17,37 +17,33 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
-const Group = ({ title, SearchNeed }) => {
+const Group = ({ title, SearchNeed, joinbtn }) => {
   const db = getDatabase();
+
   const auth = getAuth();
   const dispatch = useDispatch();
   let [grouplist, setgrouplist] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  const openModal = () => {
+  const openModal = (item) => {
     setIsOpen(true);
+    set(push(ref(db, "GroupJoinRequest/")), {
+      AdminId: item.AdminId,
+      AdminName: item.AdminName,
+      GroupKey: item.GroupKey,
+      GroupName: item.GroupName,
+      GroupTagName: item.GroupTagName,
+      GroupPhotourl: item.GroupPhotourl,
+      GroupjoinMember: auth.currentUser.displayName,
+      GroupjoinMemberid: auth.currentUser.uid,
+      GroupjoinMemberPhoto: auth.currentUser.photoURL,
+    });
   };
 
   const closeModal = () => {
     setIsOpen(false);
   };
 
-  // Hnadle accept group request
-  const HandleAcceptGroupRequest = (item) => {
-    console.log("HandleAcceptRequest item is :", item);
-    // set(push(ref(db, "GroupJoinRequest/")), {
-    //   AdminId: item.AdminId,
-    //   AdminName: item.AdminName,
-    //   GroupKey: item.GroupKey,
-    //   GroupName: item.GroupName,
-    //   GroupTagName: item.GroupTagName,
-    //   GroupjoinMember: auth.currentUser.displayName,
-    //   GroupjoinMemberid: auth.currentUser.uid,
-    //   GroupjoinMemberPhoto: auth.currentUser.photoURL,
-    // }).then(() => {
-    //   setGroupJoinButton(false);
-    // });
-  };
   // Fetching data from single message database zone
   useEffect(() => {
     const starCountRef = ref(db, "Grouplist/");
@@ -70,7 +66,7 @@ const Group = ({ title, SearchNeed }) => {
 
   // Sending data with redex store
   const HandleGrouplist = (item) => {
-    // console.log('Group msg info ' , item);
+    console.log("Group msg info ", item);
     let userinfo = {};
     userinfo.status = "Groupmsg";
     userinfo.GroupName = item.GroupName;
@@ -81,77 +77,53 @@ const Group = ({ title, SearchNeed }) => {
     dispatch(GroupChat(userinfo));
   };
 
+  // HandleAcceptRequest button functionality
+
   return (
     <>
       <div>
         <h2 className="mb-3 font-intel text-2xl font-semibold">{title}</h2>
         {SearchNeed ? <Search /> : null}
-        <div className="mt-6 h-[225px] cursor-pointer overflow-y-scroll">
+        <div className={"mt-6 h-[225px]  cursor-pointer overflow-y-scroll"}>
           <ul className="max-w-md divide-y divide-gray-200 py-3">
-            {grouplist.map(
-              (item, i) =>
-                item.AdminId != auth.currentUser.uid && (
-                  <li className="py-3 pb-3 sm:pb-5" key={i}>
-                    <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0 ">
-                        <img
-                          className=" mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                          src={item.GroupPhotourl}
-                          alt={item.GroupPhotourl}
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-intel text-sm font-medium text-primary-color">
-                          {item.GroupName}
-                        </p>
-                        <p className="truncate text-sm text-gray-500 ">
-                          {item.GroupTagName}
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <button
-                          type="button"
-                          onClick={openModal}
-                          className=" mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
-                        >
-                          join
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                )
-            )}
-            <div>
-              <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={customStyles}
+            {grouplist.map((item, i) => (
+              // item.AdminId != auth.currentUser.uid &&
+              <li
+                className="py-3 pb-3 sm:pb-5"
+                key={i}
+                onClick={() => HandleGrouplist(item)}
               >
-                <div className="text-2xl text-primary-color">
-                  <button onClick={closeModal}>
-                    <div className="mb-2  rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br ">
-                      <RxCross2 />
-                    </div>
-                  </button>
-                </div>
-
-                <div className="w-full">
-                  <div className=" relative mt-5">
-                    <div>
-                      <div className="flex items-center">
-                        <button
-                          type="button"
-                          onClick={() => HandleAcceptGroupRequest(item)}
-                          className=" mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
-                        >
-                          join
-                        </button>
-                      </div>
-                    </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 ">
+                    <img
+                      className=" mr-2 h-10 w-10 rounded-full border-x border-t border-black"
+                      src={item.GroupPhotourl}
+                      alt={item.GroupPhotourl}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-intel text-sm font-medium text-primary-color">
+                      {item.GroupName}
+                    </p>
+                    <p className="truncate text-sm text-gray-500 ">
+                      {item.GroupTagName}
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    {/* work for join btn  */}
+                    {joinbtn && (
+                      <button
+                        type="button"
+                        onClick={() => openModal(item)}
+                        className=" mr-5 mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
+                      >
+                        join
+                      </button>
+                    )}
                   </div>
                 </div>
-              </Modal>
-            </div>
+              </li>
+            ))}
           </ul>
           {grouplist.length == 0 && (
             <div
@@ -180,6 +152,37 @@ const Group = ({ title, SearchNeed }) => {
           )}
         </div>
         {/* modal part  */}
+
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          ariaHideApp={false}
+          style={customStyles}
+        >
+          <div className="text-2xl text-primary-color">
+            <button onClick={closeModal}>
+              <div className="mb-2  rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br ">
+                <RxCross2 />
+              </div>
+            </button>
+          </div>
+
+          <div className="w-full">
+            <div className=" relative mt-5">
+              <div>
+                <div className="flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => HandleAcceptGroupRequest(item)}
+                    className=" mt-2 w-full rounded-lg bg-gradient-to-br from-green-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl "
+                  >
+                    Your are joined
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
 
         {/* modal part */}
       </div>
