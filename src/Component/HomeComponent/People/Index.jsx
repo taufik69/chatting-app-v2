@@ -21,6 +21,7 @@ const People = ({ title, SearchNeed }) => {
           username: item.val().username,
           email: item.val().email,
           uid: item.val().uid,
+          photoURL: item.val().photoURL,
         });
       });
       setuserlistitem(userArray);
@@ -77,11 +78,19 @@ const People = ({ title, SearchNeed }) => {
                   <li className="py-3 pb-3 sm:pb-5" key={i}>
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0 ">
-                        <img
-                          className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
-                          src="../../../../public/images/Home/oggy.gif"
-                          alt="public/images/Home/oggy.gif"
-                        />
+                        {photoURL ? (
+                          <img
+                            className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
+                            src={item.photoURL}
+                            alt={item.photoURL}
+                          />
+                        ) : (
+                          <img
+                            className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
+                            src="../../../../public/images/Home/oggy.gif"
+                            alt="public/images/Home/oggy.gif"
+                          />
+                        )}
                       </div>
                       <div className="relative min-w-0 flex-1">
                         <p className="font-intel text-sm font-medium text-primary-color">

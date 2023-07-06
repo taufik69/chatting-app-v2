@@ -7,6 +7,7 @@ import { BiMessageRounded, BiGroup } from "react-icons/bi";
 import { FaUserFriends } from "react-icons/fa";
 import { GrAppsRounded } from "react-icons/gr";
 import { CiSettings } from "react-icons/ci";
+import SettingRignt from "../SettingComponent/Index";
 const Homeleft = ({ active }) => {
   const auth = getAuth();
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Homeleft = ({ active }) => {
         setphoturl(photoURL);
       }
     });
-  }, []);
+  });
 
   // Sign out functonality with firebase sign out function
 
