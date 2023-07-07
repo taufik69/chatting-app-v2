@@ -78,7 +78,7 @@ const People = ({ title, SearchNeed }) => {
                   <li className="py-3 pb-3 sm:pb-5" key={i}>
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0 ">
-                        {photoURL ? (
+                        {item.photoURL ? (
                           <img
                             className="mr-2 h-10 w-10 rounded-full border-x border-t border-black"
                             src={item.photoURL}
